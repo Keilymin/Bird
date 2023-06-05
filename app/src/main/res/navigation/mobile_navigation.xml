@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/splash">
+
+    <fragment
+        android:id="@+id/game"
+        android:name="com.keilymin.bird.GameFragment"
+        android:label="Game" />
+
+    <fragment
+        android:id="@+id/webview"
+        android:name="com.keilymin.bird.WebViewFragment"
+        android:label="WebView"
+        tools:layout="@layout/fragment_webview" />
+
+    <fragment
+        android:id="@+id/splash"
+        android:name="com.keilymin.bird.SplashFragment"
+        android:label="WebView"
+        tools:layout="@layout/fragment_splash" />
+
+
+</navigation>
