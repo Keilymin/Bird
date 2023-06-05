@@ -7,18 +7,18 @@
 
     <fragment
         android:id="@+id/game"
-        android:name="com.keilymin.bird.GameFragment"
+        android:name="com.keilymin.bird.fragments.GameFragment"
         android:label="Game" />
 
     <fragment
         android:id="@+id/webview"
-        android:name="com.keilymin.bird.WebViewFragment"
+        android:name="com.keilymin.bird.fragments.WebViewFragment"
         android:label="WebView"
         tools:layout="@layout/fragment_webview" />
 
     <fragment
         android:id="@+id/splash"
-        android:name="com.keilymin.bird.SplashFragment"
+        android:name="com.keilymin.bird.fragments.SplashFragment"
         android:label="WebView"
         tools:layout="@layout/fragment_splash" />
 

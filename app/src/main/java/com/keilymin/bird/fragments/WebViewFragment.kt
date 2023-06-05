@@ -1,4 +1,4 @@
-package com.keilymin.bird
+package com.keilymin.bird.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
+import com.keilymin.bird.R
 
 class WebViewFragment : Fragment() {
-    lateinit var webView: WebView
+    companion object{
+        const val URL = "com.keilymin.bird.extras.URL"
+    }
+    private lateinit var webView: WebView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_webview, container, false)
@@ -17,7 +21,7 @@ class WebViewFragment : Fragment() {
 
         webView.settings.javaScriptEnabled = true
         webView.settings.cacheMode = WebSettings.LOAD_DEFAULT
-        webView.loadUrl("https://www.pinterest.com/search/pins/?q=adnroid&rs=typed")
+        webView.loadUrl(arguments?.getString(URL)!!)
 
         return root
     }

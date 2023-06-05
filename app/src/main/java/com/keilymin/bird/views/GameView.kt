@@ -1,10 +1,11 @@
-package com.keilymin.bird
+package com.keilymin.bird.views
 
 import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.keilymin.bird.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -122,16 +123,16 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
                         var upText: String
                         var downText: String
                         if (isGameOver){
-                            upText = "Game Over"
-                            downText = "Tap to Restart"
+                            upText = context.getString(R.string.game_over)
+                            downText = context.getString(R.string.tap_to_restart)
                         } else{
-                            upText = "Game Paused"
-                            downText = "Tap to Continue"
+                            upText = context.getString(R.string.game_paused)
+                            downText = context.getString(R.string.tap_to_continue)
                         }
                         canvas.drawText(upText, centerX, centerY, startButtonTextPaint)
                         canvas.drawText(downText, centerX, centerY + startButtonTextPaint.textSize, startButtonTextPaint)
 
-                        canvas.drawText("Score: $score", centerX, centerY - startButtonTextPaint.textSize * 5, startButtonTextPaint)
+                        canvas.drawText(context.getString(R.string.score)+": $score", centerX, centerY - startButtonTextPaint.textSize * 5, startButtonTextPaint)
                     } else if (!gameStarted) {
                         // Draw start button
                         val centerX = canvas.width / 2f
@@ -144,7 +145,7 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
                         )
                         canvas.drawRect(startButtonRect, startButtonPaint)
                         canvas.drawText(
-                            "Start",
+                            context.getString(R.string.start),
                             centerX,
                             centerY + startButtonPaint.textSize,
                             startButtonTextPaint
@@ -159,7 +160,7 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
                         )
                         canvas.drawBitmap(pipeBottom, pipeX, pipeGapY + pipeOffset, null)
 
-                        canvas.drawText("Score: $score", 20f, 60f, scorePaint)
+                        canvas.drawText(context.getString(R.string.score)+": $score", 20f, 60f, scorePaint)
                     }
 
                     surfaceHolder.unlockCanvasAndPost(canvas)

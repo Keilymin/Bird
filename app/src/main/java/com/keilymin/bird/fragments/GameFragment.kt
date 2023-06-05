@@ -1,10 +1,11 @@
-package com.keilymin.bird
+package com.keilymin.bird.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.keilymin.bird.views.GameView
 
 class GameFragment : Fragment() {
     private lateinit var gameView: GameView
