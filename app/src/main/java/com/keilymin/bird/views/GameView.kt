@@ -1,7 +1,9 @@
 package com.keilymin.bird.views
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.*
+import android.media.MediaPlayer
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -14,6 +16,12 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
     private var surfaceHolder: SurfaceHolder = holder
     private var isPlaying = false
     private var isPause = false
+    private var saves : SharedPreferences? = null
+
+    val wing: MediaPlayer = MediaPlayer.create(context, R.raw.wing)
+    val die: MediaPlayer = MediaPlayer.create(context, R.raw.die)
+    val point: MediaPlayer = MediaPlayer.create(context, R.raw.point)
+
 
     private var bird: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.bird)
     private var pipeTop: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pipe_top)
@@ -31,6 +39,12 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
     private var pipeOffset = 0f
 
     private var score = 0
+    private var maxScore = 0
+
+    constructor(context: Context, preferences : SharedPreferences?) : this(context){
+        saves = preferences
+        maxScore = saves?.getInt(context.resources.getString(R.string.score), 0)!!
+    }
 
     private val scorePaint = Paint().apply {
         color = Color.BLACK
@@ -41,7 +55,8 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
     private var gameStarted = false
     private val startButtonRect = RectF()
     private val startButtonPaint = Paint().apply {
-        color = Color.GREEN
+        color = Color.YELLOW
+        style = Paint.Style.FILL
     }
     private val startButtonTextPaint = Paint().apply {
         color = Color.BLACK
@@ -133,8 +148,22 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
                         canvas.drawText(downText, centerX, centerY + startButtonTextPaint.textSize, startButtonTextPaint)
 
                         canvas.drawText(context.getString(R.string.score)+": $score", centerX, centerY - startButtonTextPaint.textSize * 5, startButtonTextPaint)
+                        if (score<= maxScore) {
+                            canvas.drawText(
+                                context.getString(R.string.maxScore) + ": $maxScore",
+                                centerX,
+                                centerY - startButtonTextPaint.textSize * 8,
+                                startButtonTextPaint
+                            )
+                        } else{
+                            canvas.drawText(
+                                context.getString(R.string.newHightScore),
+                                centerX,
+                                centerY - startButtonTextPaint.textSize * 8,
+                                startButtonTextPaint
+                            )
+                        }
                     } else if (!gameStarted) {
-                        // Draw start button
                         val centerX = canvas.width / 2f
                         val centerY = canvas.height / 2f
                         val buttonWidth = 400f
@@ -143,11 +172,12 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
                             centerX - buttonWidth / 2, centerY - buttonHeight / 2,
                             centerX + buttonWidth / 2, centerY + buttonHeight / 2
                         )
-                        canvas.drawRect(startButtonRect, startButtonPaint)
+                        val radius = 100f
+                        canvas.drawRoundRect(startButtonRect, radius, radius, startButtonPaint)
                         canvas.drawText(
                             context.getString(R.string.start),
                             centerX,
-                            centerY + startButtonPaint.textSize,
+                            centerY + startButtonPaint.textSize*2,
                             startButtonTextPaint
                         )
                     } else if (gameStarted) {
@@ -179,6 +209,7 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
                             resources.displayMetrics.heightPixels.toFloat() - pipeOffset
                         )
                         score++
+                        point.start()
                     }
 
                     if (birdY + bird.height > resources.displayMetrics.heightPixels || birdY < 0) {
@@ -237,12 +268,19 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> birdVelocity = -20f
+            MotionEvent.ACTION_DOWN -> {
+                if (gameStarted) {
+                    birdVelocity = -20f
+                    wing.seekTo(0)
+                    wing.start()
+                }
+            }
         }
         return true
     }
 
     private fun gameOver() {
+        die.start()
         isGameOver = true
         gameStarted = false
         birdX = 100f
@@ -252,6 +290,12 @@ class GameView(context: Context) : SurfaceView(context), Runnable {
             pipeOffset,
             resources.displayMetrics.heightPixels.toFloat() - pipeOffset
         )
+        if (maxScore <score) {
+            val editor = saves?.edit()
+            editor?.putInt(context.resources.getString(R.string.score), score)
+            editor?.apply()
+            maxScore = score
+        }
     }
 
     private fun randomFloat(min: Float, max: Float): Float {

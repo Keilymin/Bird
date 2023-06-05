@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/has_no_internet_connection"
         android:textColor="@color/black"
+        android:layout_marginTop="24dp"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

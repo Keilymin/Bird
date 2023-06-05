@@ -9,4 +9,6 @@
     <string name="tap_to_continue">Tap to Continue</string>
     <string name="score">Score</string>
     <string name="start">Start</string>
+    <string name="maxScore">Max score</string>
+    <string name="newHightScore">New Hight Score</string>
 </resources>
